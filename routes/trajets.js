@@ -19,9 +19,9 @@ router.get('/test', (req, res) => {
         });
 });
 
-// Définition de la route '/' permettant d'obtenir les trajets disponibles (10 max) pour une date donnée
+// Définition de la route '/' permettant d'obtenir les trajets disponibles (30 max) pour une date donnée
 //cette route en get utilise req.query pour recuperer les parametres de la requete
-router.get('/', async (req , res) => {
+router.get('/recherche', async (req , res) => {
     // Vérifie si les champs 'departure', 'arrival' et 'date' sont présents dans la requête
     if (!req.query.departure || !req.query.arrival || !req.query.date) {
         // Si un ou plusieurs champs sont manquants, renvoie une réponse d'erreur au client
@@ -49,8 +49,9 @@ router.get('/', async (req , res) => {
         const trajets = await Trajet.find({
             departure: req.query.departure,
             arrival: req.query.arrival,
+            // Recherche les trajets dont la date de départ est supérieure à la date de la requête
             date: { $gt: requestDate.toDate() }
-        }).limit(10).exec();
+        }).limit(30).exec();
         // Vérifie si des trajets ont été trouvés
         if (trajets === null || trajets.length === 0) {
             // Si aucun trajet n'a été trouvé, renvoie une réponse d'erreur au client
@@ -130,6 +131,7 @@ router.get('/', async (req , res) => {
     //route permettant de recuperer les trajets dans le panier
     //route permettant de recuperer les trajets reserves
     router.get('/trajetbooked', (req, res) => {
+        //voir si on gere en back ou front les dates dépassés
         Trajet.find({ reservationStatus : 'booked' })
         .then(data => {
             res.json({ result : true, trajets : data });
