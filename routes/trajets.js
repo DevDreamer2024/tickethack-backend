@@ -30,6 +30,7 @@ router.get('/recherche', async (req , res) => {
     }
     // Convertit la date de la requête en un objet moment
     const requestDate = moment(req.query.date);
+    console.log(requestDate);
     // Obtient la date actuelle
     const today = moment();
     // Vérifie si la date de la requête est valide
@@ -50,7 +51,7 @@ router.get('/recherche', async (req , res) => {
             departure: req.query.departure,
             arrival: req.query.arrival,
             // Recherche les trajets dont la date de départ est supérieure à la date de la requête
-            date: { $gt: requestDate.toDate() }
+            date: { $gte: requestDate.toDate() }
         }).limit(30).exec();
         // Vérifie si des trajets ont été trouvés
         if (trajets === null || trajets.length === 0) {
@@ -71,6 +72,8 @@ router.get('/recherche', async (req , res) => {
     //toute les routes en post utilise req.body pour recuperer les parametres de la requete
 
     router.post('/ajouteraupanier',  (req, res) => {
+
+        //new : true permet de return le trajet modifié
         Trajet.findOneAndUpdate({ _id  : req.body.id }, { reservationStatus : 'cart' }, { new : true })
         .then(data => { 
             if(data === null){
@@ -142,7 +145,7 @@ router.get('/recherche', async (req , res) => {
     //route reinitialisant les trajets booked (pour les tests)
 
     router.get('/reset', (req, res) => {
-        Trajet.updateMany({ reservationStatus : 'booked' }, { reservationStatus : 'réservable' })
+        Trajet.updateMany({ reservationStatus : 'booked' }, { reservationStatus : 'réservable' }, { new : true })
         .then(data => {
             res.json({ result : true });
         })
