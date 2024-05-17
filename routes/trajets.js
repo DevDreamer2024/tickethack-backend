@@ -113,21 +113,18 @@ router.get('/recherche', async (req , res) => {
     });
     
     //route permettant de valider une reservation 
-    router.post('/validerlacommande', (req, res) => {
-        Trajet.findOneAndUpdate({ _id  : req.body.id, reservationStatus : 'cart' }, { reservationStatus : 'booked' }, { new : true })
+    //a modifier pour que cela boucle sur tout les elements avec reservationsstatus cart
+    
+    router.get('/validerlacommande', (req, res) => {
+        Trajet.updateMany({ reservationStatus : 'cart' }, { reservationStatus : 'booked' })
         .then(data => {
-            if(data === null){
-                res.json({ result : false, error : 'No trajet found'});
-            } else {
-                res.json({ result : true, trajet : data });
-            }
+            res.json({ result : true });
         })
         .catch(err => {
             console.error(err);
             res.status(500).json({ error : 'Internal server error'});
         });
     });
-
     //route permettant de recuperer les trajets dans le panier
     //route permettant de recuperer les trajets reserves
     router.get('/trajetbooked', (req, res) => {
