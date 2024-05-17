@@ -39,12 +39,12 @@ router.get('/recherche', async (req , res) => {
         res.json({ result: false, error: 'invalid date format'});
         return;
     }
-    // Vérifie si la date de la requête est dans le passé
-    if (requestDate.isBefore(today)) {
+    // Vérifie si la date de la requête est dans le passé //mais empeche de prendre des billets pour aujourd'hui
+   // if (requestDate.isBefore(today)) {
         // Si la date est dans le passé, renvoie une réponse d'erreur au client
-        res.json({ result: false, error: 'date is in the past'});
-        return;
-    }
+     //   res.json({ result: false, error: 'date is in the past'});
+       // return;
+    //}
     try {
         // Recherche des trajets dans la base de données qui correspondent aux critères de la requête
         const trajets = await Trajet.find({
