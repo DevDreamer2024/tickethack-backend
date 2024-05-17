@@ -139,4 +139,17 @@ router.get('/recherche', async (req , res) => {
         });
     });
 
+    //route reinitialisant les trajets booked (pour les tests)
+
+    router.get('/reset', (req, res) => {
+        Trajet.updateMany({ reservationStatus : 'booked' }, { reservationStatus : 'réservable' })
+        .then(data => {
+            res.json({ result : true });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error : 'Internal server error'});
+        });
+    });
+
 module.exports = router;
