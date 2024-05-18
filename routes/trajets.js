@@ -5,6 +5,7 @@ const moment = require('moment');
 const Trajet = require('../models/trajet');
 
 // Définition de la route '/test'
+/*
 router.get('/test', (req, res) => {
     // Recherche des 10 premiers trajets dans la base de données
     Trajet.find().limit(10).exec()
@@ -17,7 +18,7 @@ router.get('/test', (req, res) => {
             console.error(err);
             res.status(500).json({ error: 'Internal server error' });
         });
-});
+});*/
 
 // Définition de la route '/' permettant d'obtenir les trajets disponibles (30 max) pour une date donnée
 //cette route en get utilise req.query pour recuperer les parametres de la requete
